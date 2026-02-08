@@ -1,0 +1,93 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------------------
+    // Helper Functions
+    // ------------------------------------------------------------------------
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isSuperAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'abdallah@almoftah.com' ||
+        exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid))
+      );
+    }
+
+    function isActiveAdmin() {
+      return isSignedIn() && 
+             exists(/databases/$(database)/documents/admin_users/$(request.auth.uid)) && 
+             get(/databases/$(database)/documents/admin_users/$(request.auth.uid)).data.visible == true;
+    }
+
+    function isAdmin() {
+      return isSuperAdmin() || isActiveAdmin();
+    }
+
+    function isDocOwner() {
+      return isAdmin() && (
+        resource.data.createdBy == request.auth.uid || 
+        (resource.data.sharedWith != null && request.auth.uid in resource.data.sharedWith)
+      );
+    }
+
+    // ------------------------------------------------------------------------
+    // Collection Rules
+    // ------------------------------------------------------------------------
+    
+    match /users/{userId} {
+       allow read, update: if isOwner(userId);
+       allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+     }
+
+    // Publicly readable listings, admin managed
+    match /units/{unitId} {
+      allow read, get, list: if true;
+      allow create: if isAdmin();
+      allow update, delete: if isSuperAdmin() || isDocOwner();
+    }
+
+    match /leads/{leadId} {
+      allow create: if isAdmin();
+      allow read, update, delete: if isSuperAdmin() || isDocOwner();
+    }
+
+    match /brokers/{brokerId} {
+      allow create: if isAdmin();
+      allow read, update, delete: if isSuperAdmin() || isDocOwner();
+    }
+
+    match /clients/{clientId} {
+      allow create: if isAdmin();
+      allow read, update, delete: if isSuperAdmin() || isDocOwner();
+    }
+    
+    match /chats/{chatId} {
+      allow read, list: if isAdmin() || (isSignedIn() && (chatId.split('_')[0] == request.auth.uid || (resource != null && resource.data.userId == request.auth.uid)));
+      allow create: if isAdmin() || (isSignedIn() && request.resource.data.userId == request.auth.uid);
+      allow update: if isAdmin() || (resource != null && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    match /admin_users/{adminUserId} {
+      allow get: if isOwner(adminUserId) || isSuperAdmin();
+      allow list: if isAdmin();
+      allow create, update: if isSuperAdmin() || (isSignedIn() && request.auth.token.email == 'abdallah@almoftah.com');
+      allow delete: if isSuperAdmin();
+    }
+
+    match /roles_admin/{uid} {
+      allow get: if isOwner(uid) || isSuperAdmin();
+      allow list, update, delete: if isSuperAdmin();
+      allow create: if isSuperAdmin() || (isSignedIn() && request.auth.token.email == 'abdallah@almoftah.com');
+    }
+
+  }
+}

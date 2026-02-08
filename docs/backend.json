@@ -1,0 +1,75 @@
+
+{
+  "entities": {
+    "Unit": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Unit",
+      "type": "object",
+      "description": "Represents a real estate unit listed on the platform.",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "price": { "type": "number" },
+        "description": { "type": "string" },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "url": {"type": "string"},
+              "hint": {"type": "string"}
+            },
+            "required": ["id", "url", "hint"]
+          }
+        },
+        "city": { "type": "string" },
+        "governorate": { "type": "string" },
+        "bedrooms": { "type": "number" },
+        "bathrooms": { "type": "number" },
+        "area": { "type": "number" },
+        "clientName": { "type": "string" },
+        "clientPhone": { "type": "string" },
+        "fromBroker": { "type": "boolean" },
+        "createdBy": { "type": "string" },
+        "createdByName": { "type": "string" }
+      }
+    },
+    "AdminUser": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AdminUser",
+      "type": "object",
+      "description": "Represents an admin user of the system.",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "password": { "type": "string" },
+        "visible": { "type": "boolean" },
+        "role": { "type": "string" },
+        "tasks": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/backend/entities/UserProfile" },
+      "description": "Stores public profiles."
+    },
+    "units/{unitId}": {
+      "schema": { "$ref": "#/backend/entities/Unit" },
+      "description": "Stores real estate units."
+    },
+    "admin_users/{adminUserId}": {
+      "schema": { "$ref": "#/backend/entities/AdminUser" },
+      "description": "Stores admin accounts."
+    }
+  }
+}
