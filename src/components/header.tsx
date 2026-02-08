@@ -25,9 +25,9 @@ export function Header() {
     <header className="bg-card border-b sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
         {/* 
-            The Logo component already contains its own internal <Link>.
-            We do NOT wrap it in another <Link> here to avoid the hydration error:
-            "<a> cannot be a descendant of <a>".
+            CRITICAL: The Logo component already contains its own internal <Link>.
+            Do NOT wrap <Logo /> in another <Link> component.
+            This prevents the hydration error: "<a> cannot be a descendant of <a>".
         */}
         <Logo />
         

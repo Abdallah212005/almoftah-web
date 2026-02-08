@@ -2,15 +2,15 @@ import { PropertyDetailClient } from './property-detail-client';
 
 /**
  * Next.js 15 Static Export Requirement:
- * When using 'output: export', dynamic routes must provide parameters at build time.
- * For static exports, dynamicParams MUST be false to avoid runtime errors on unknown paths.
+ * When using 'output: export', all dynamic routes MUST provide parameters at build time.
+ * dynamicParams MUST be false to ensure only generated paths are served.
  */
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
   /**
-   * We provide a placeholder to satisfy the build requirement.
-   * In a production static export, you would ideally fetch all unit IDs from Firestore here.
+   * We provide a placeholder to satisfy the build requirement for the dynamic route segment.
+   * In a production environment with 'output: export', you would fetch all actual IDs here.
    */
   return [
     { id: 'placeholder' }
