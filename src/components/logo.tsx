@@ -12,7 +12,7 @@ export function Logo() {
   }, []);
 
   if (!mounted) {
-    return <div className="h-12 w-[180px]" />;
+    return <div className="h-12 w-[180px] bg-muted/20 rounded animate-pulse" />;
   }
 
   return (
@@ -28,7 +28,6 @@ export function Logo() {
           width={180}
           height={48}
           priority
-          unoptimized
         />
       </div>
     </div>
