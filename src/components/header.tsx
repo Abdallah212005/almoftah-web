@@ -28,31 +28,31 @@ export function Header() {
           <Logo />
         </div>
         
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-2 md:gap-4">
            { isAdmin && (
-             <Button variant="ghost" asChild>
+             <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
                 <Link href="/admin">
                   <Building2 className="mr-2 h-4 w-4" />
-                  Admin Panel
+                  Admin
                 </Link>
               </Button>
            )}
           {!isUserLoading && (
             <>
               {user ? (
-                <Button variant="ghost" onClick={handleLogout}>
+                <Button variant="ghost" size="sm" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </Button>
               ) : (
                 <>
-                    <Button variant="ghost" asChild>
+                    <Button variant="ghost" size="sm" asChild>
                       <Link href="/login">
                         <LogIn className="mr-2 h-4 w-4" />
                         Login
                       </Link>
                     </Button>
-                    <Button asChild>
+                    <Button size="sm" asChild className="hidden sm:flex">
                       <Link href="/signup">
                         <UserPlus className="mr-2 h-4 w-4" />
                         Sign Up
