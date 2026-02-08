@@ -12,6 +12,7 @@ export function Logo() {
     setMounted(true);
   }, []);
 
+  // Use a placeholder during SSR to prevent hydration mismatch
   if (!mounted) {
     return <div className="h-10 w-48 bg-muted/10 rounded animate-pulse" />;
   }
