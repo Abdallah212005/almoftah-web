@@ -11,7 +11,6 @@ export function Logo() {
     setMounted(true);
   }, []);
 
-  // Use a simple placeholder or nothing during hydration to prevent mismatch
   if (!mounted) {
     return <div className="h-12 w-[180px] bg-muted/10 rounded animate-pulse" />;
   }
@@ -30,7 +29,6 @@ export function Logo() {
           height={48}
           priority
           onError={(e) => {
-            // Fallback for missing logo image
             const target = e.target as HTMLImageElement;
             target.style.display = 'none';
           }}
