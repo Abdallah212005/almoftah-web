@@ -49,7 +49,7 @@ service cloud.firestore {
 
     // Publicly readable listings, admin managed
     match /units/{unitId} {
-      allow read, get, list: if true;
+      allow read, list: if true;
       allow create: if isAdmin();
       allow update, delete: if isSuperAdmin() || isDocOwner();
     }
