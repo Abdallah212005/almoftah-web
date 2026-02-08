@@ -7,10 +7,15 @@ import { PropertyDetailClient } from './property-detail-client';
  */
 export const dynamicParams = false;
 
+/**
+ * Generates the static paths for the properties detail page.
+ * For a static export, we must provide at least one path.
+ * Real IDs are handled client-side in PropertyDetailClient.
+ */
 export async function generateStaticParams() {
-  // We provide a placeholder ID so the static build succeeds.
-  // Real property IDs are handled dynamically on the client side via Firestore.
-  return [{ id: 'placeholder' }];
+  return [
+    { id: 'placeholder' }
+  ];
 }
 
 type Props = {
@@ -18,7 +23,8 @@ type Props = {
 };
 
 export default async function PropertyDetailPage({ params }: Props) {
-  const { id } = await params;
+  // Next.js 15: params must be awaited
+  const resolvedParams = await params;
   
-  return <PropertyDetailClient id={id} />;
+  return <PropertyDetailClient id={resolvedParams.id} />;
 }
