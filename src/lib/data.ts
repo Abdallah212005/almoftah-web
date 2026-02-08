@@ -1,6 +1,6 @@
 import type { Unit, Lead, Broker, AdminUser, NormalUser, Chat } from './definitions';
 
-// Resetting all local data to start fresh. The Firestore database should be cleared manually in the Firebase console.
+// System is reset. Database collections should be cleared in Firebase Console.
 export const allUnits: Unit[] = [];
 export const allLeads: Lead[] = [];
 export const allBrokers: Broker[] = [];
