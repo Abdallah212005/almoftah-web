@@ -23,8 +23,8 @@ export function Header() {
 
   return (
     <header className="bg-card border-b sticky top-0 z-50">
-      <div className="container mx-auto px-4 flex justify-between items-center h-48 md:h-56">
-        <div className="flex items-center h-full py-4">
+      <div className="container mx-auto px-4 flex justify-between items-center h-24 md:h-32">
+        <div className="flex items-center h-full">
           <Logo />
         </div>
         
