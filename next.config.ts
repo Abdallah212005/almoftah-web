@@ -1,7 +1,8 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  // Standard development and production output
+  output: 'export',
+  basePath: '/almoftah-web',
   images: {
     unoptimized: true,
     remotePatterns: [
