@@ -13,17 +13,17 @@ export function Logo() {
   }, []);
 
   if (!mounted) {
-    return <div className="h-16 w-16 bg-muted/5 rounded-full animate-pulse" />;
+    return <div className="h-24 w-24 bg-muted/5 rounded-full animate-pulse" />;
   }
 
   return (
     <Link href="/" className="flex items-center transition-opacity hover:opacity-90">
-      <div className="relative h-16 w-16">
+      <div className="relative h-24 w-24">
         <Image 
           src={logoImg} 
           alt="Almoftah Logo" 
-          width={64} 
-          height={64} 
+          width={96} 
+          height={96} 
           className="object-contain"
           priority
         />

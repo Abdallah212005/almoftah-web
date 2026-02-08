@@ -15,6 +15,7 @@ export async function generateStaticParams() {
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     const db = getFirestore(app);
     const querySnapshot = await getDocs(collection(db, 'units'));
+    
     const paths = querySnapshot.docs.map((doc) => ({
       id: doc.id,
     }));

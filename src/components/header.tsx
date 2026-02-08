@@ -23,7 +23,7 @@ export function Header() {
 
   return (
     <header className="bg-card border-b sticky top-0 z-50">
-      <div className="container mx-auto px-4 flex justify-between items-center h-20">
+      <div className="container mx-auto px-4 flex justify-between items-center h-24">
         <Logo />
         
         <nav className="flex items-center gap-4">
