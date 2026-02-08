@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +12,6 @@ import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
 import type { Unit } from '@/lib/definitions';
 import { doc } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useParams } from 'next/navigation';
 
 function PropertyDetailSkeleton() {
     return (
@@ -66,14 +65,9 @@ function PropertyDetailSkeleton() {
     );
 }
 
-export function PropertyDetailClient({ id: initialId }: { id: string }) {
-  const params = useParams();
+export function PropertyDetailClient({ id }: { id: string }) {
   const firestore = useFirestore();
   
-  // Handle URL decoding and hydration issues
-  const rawId = (params?.id as string) || initialId;
-  const id = rawId ? decodeURIComponent(rawId) : null;
-
   // Wait for hydration and valid ID before querying
   const unitRef = useMemoFirebase(() => (firestore && id && id !== 'placeholder') ? doc(firestore, 'units', id) : null, [firestore, id]);
   const { data: unit, isLoading } = useDoc<Unit>(unitRef);
