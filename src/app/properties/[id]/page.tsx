@@ -8,7 +8,7 @@ import { PropertyDetailClient } from './property-detail-client';
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  // Return a placeholder to satisfy the build process for static export.
+  // Provide a placeholder ID to satisfy the build requirements for static export.
   // The actual property data is fetched on the client side in PropertyDetailClient.
   return [
     { id: 'placeholder' }
