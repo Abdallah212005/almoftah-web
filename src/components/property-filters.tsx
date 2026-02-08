@@ -72,7 +72,7 @@ function FiltersContent() {
     setSelectedGov('all');
     setSelectedCity('all');
     setMinPrice('');
-    setSelectedCity('all');
+    setMaxPrice('');
     router.push('/properties/');
   };
 
