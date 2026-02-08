@@ -116,8 +116,8 @@ export default function ClientsPage() {
   };
 
   const filteredClients = clients?.filter(c => 
-    c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    c.phone.includes(searchTerm)
+    (c.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+    (c.phone || '').includes(searchTerm)
   );
 
   const associatedUnits = units?.filter(u => u.clientPhone === selectedClientDetail?.phone) || [];
@@ -176,10 +176,10 @@ export default function ClientsPage() {
                         onClick={() => handleDetailClick(client)}
                         className="font-medium text-primary hover:underline text-left"
                       >
-                        {client.name}
+                        {client.name || 'Unnamed Client'}
                       </button>
                     </TableCell>
-                    <TableCell>{client.phone}</TableCell>
+                    <TableCell>{client.phone || 'No Phone'}</TableCell>
                     <TableCell className="text-right">
                       <Badge variant="secondary">{count}</Badge>
                     </TableCell>
@@ -200,6 +200,13 @@ export default function ClientsPage() {
                   </TableRow>
                 );
               })}
+              {!isClientsLoading && filteredClients?.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center py-12 text-muted-foreground">
+                    No clients found.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>

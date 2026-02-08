@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Send, MessageSquare, Trash2, AlertCircle } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, isValid } from 'date-fns';
 import { useUser, useFirestore, useCollection, useMemoFirebase, setDocumentNonBlocking, deleteDocumentNonBlocking } from '@/firebase';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -38,7 +38,9 @@ function ChatListItem({
   onDelete: (e: React.MouseEvent) => void,
   isSuperAdmin: boolean
 }) {
-  const lastMessage = chat.messages[chat.messages.length - 1];
+  const lastMessage = chat.messages?.[chat.messages.length - 1];
+  const date = chat.lastMessageAt ? new Date(chat.lastMessageAt) : null;
+
   return (
     <div className="relative group">
       <button
@@ -47,17 +49,17 @@ function ChatListItem({
       >
         <div className="flex justify-between items-start">
           <div className='flex-1 pr-6'>
-              <p className="font-semibold text-sm">{chat.userName}</p>
-              <p className="text-xs text-muted-foreground truncate">{chat.unitTitle}</p>
+              <p className="font-semibold text-sm">{chat.userName || 'Unknown User'}</p>
+              <p className="text-xs text-muted-foreground truncate">{chat.unitTitle || 'Property Inquiry'}</p>
           </div>
           {!chat.readByAdmin && <Badge variant="destructive" className='h-5'>New</Badge>}
         </div>
         <p className="text-xs text-muted-foreground mt-1 truncate">
-          {lastMessage?.sender === 'user' ? `${chat.userName}: ` : 'You: '}{lastMessage?.text}
+          {lastMessage?.sender === 'user' ? `${chat.userName || 'User'}: ` : 'You: '}{lastMessage?.text || '...'}
         </p>
-        {chat.lastMessageAt && (
+        {date && isValid(date) && (
           <p className="text-xs text-muted-foreground text-right mt-1">
-            {formatDistanceToNow(new Date(chat.lastMessageAt), { addSuffix: true })}
+            {formatDistanceToNow(date, { addSuffix: true })}
           </p>
         )}
       </button>
@@ -104,7 +106,7 @@ export default function ChatPage() {
             viewport.scrollTop = viewport.scrollHeight;
         }
       }
-  }, [selectedChat, selectedChat?.messages.length]);
+  }, [selectedChat, selectedChat?.messages?.length]);
 
 
   const handleSelectChat = (chat: Chat) => {
@@ -126,7 +128,7 @@ export default function ChatPage() {
       timestamp: new Date().toISOString(),
     };
     
-    const updatedMessages = [...selectedChat.messages, newMessage];
+    const updatedMessages = [...(selectedChat.messages || []), newMessage];
     const updatedChatData = {
       messages: updatedMessages,
       lastMessageAt: new Date().toISOString(),
@@ -155,7 +157,7 @@ export default function ChatPage() {
 
   if (!isActive && !isUserLoading) {
       return (
-          <div className="flex flex-col items-center justify-center h-full text-center">
+          <div className="flex flex-col items-center justify-center h-full text-center p-12">
               <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
               <h2 className="text-xl font-bold">Access Restricted</h2>
               <p className="text-muted-foreground">You do not have permission to view the chat system.</p>
@@ -198,8 +200,8 @@ export default function ChatPage() {
               <>
                 <div className="p-4 border-b bg-background flex justify-between items-center">
                   <div>
-                    <h3 className="font-semibold">{selectedChat.userName}</h3>
-                    <p className="text-sm text-muted-foreground">{selectedChat.unitTitle}</p>
+                    <h3 className="font-semibold">{selectedChat.userName || 'Unknown User'}</h3>
+                    <p className="text-sm text-muted-foreground">{selectedChat.unitTitle || 'Property Inquiry'}</p>
                   </div>
                   {isSuperAdmin && (
                     <Button variant="ghost" size="icon" onClick={() => setDeleteChatId(selectedChat.id)}>
@@ -209,33 +211,38 @@ export default function ChatPage() {
                 </div>
                 <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
                   <div className="space-y-4">
-                    {selectedChat.messages.map((msg) => (
-                      <div
-                        key={msg.id}
-                        className={`flex items-end gap-2 ${msg.sender === 'admin' ? 'justify-end' : ''}`}
-                      >
-                        {msg.sender === 'user' && (
-                          <Avatar className="h-8 w-8">
-                            <AvatarFallback>{selectedChat.userName.charAt(0).toUpperCase()}</AvatarFallback>
-                          </Avatar>
-                        )}
+                    {selectedChat.messages?.map((msg) => {
+                      const msgDate = msg.timestamp ? new Date(msg.timestamp) : null;
+                      return (
                         <div
-                          className={`max-w-md rounded-lg p-3 ${
-                            msg.sender === 'admin' ? 'bg-primary text-primary-foreground' : 'bg-background shadow-sm border'
-                          }`}
+                          key={msg.id}
+                          className={`flex items-end gap-2 ${msg.sender === 'admin' ? 'justify-end' : ''}`}
                         >
-                          <p className="text-sm">{msg.text}</p>
-                          <p className={`text-[10px] mt-1 ${msg.sender === 'admin' ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
-                             {formatDistanceToNow(new Date(msg.timestamp), { addSuffix: true })}
-                          </p>
+                          {msg.sender === 'user' && (
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback>{(selectedChat.userName || 'U').charAt(0).toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                          )}
+                          <div
+                            className={`max-w-md rounded-lg p-3 ${
+                              msg.sender === 'admin' ? 'bg-primary text-primary-foreground' : 'bg-background shadow-sm border'
+                            }`}
+                          >
+                            <p className="text-sm">{msg.text}</p>
+                            {msgDate && isValid(msgDate) && (
+                              <p className={`text-[10px] mt-1 ${msg.sender === 'admin' ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+                                 {formatDistanceToNow(msgDate, { addSuffix: true })}
+                              </p>
+                            )}
+                          </div>
+                           {msg.sender === 'admin' && (
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback>A</AvatarFallback>
+                            </Avatar>
+                          )}
                         </div>
-                         {msg.sender === 'admin' && (
-                          <Avatar className="h-8 w-8">
-                            <AvatarFallback>A</AvatarFallback>
-                          </Avatar>
-                        )}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </ScrollArea>
                 <div className="p-4 border-t bg-background mt-auto">
