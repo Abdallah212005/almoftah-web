@@ -18,7 +18,7 @@ export function Logo() {
 
   return (
     <Link href="/" className="flex items-center transition-opacity hover:opacity-90 h-full">
-      <div className="relative h-20 w-20 md:h-28 md:w-28">
+      <div className="relative h-24 w-24 md:h-32 md:w-32 -mb-2">
         <Image 
           src={logoImg} 
           alt="Almoftah Logo" 

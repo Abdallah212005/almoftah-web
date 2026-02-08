@@ -22,8 +22,8 @@ export function Header() {
   const isAdmin = user && user.role !== 'user';
 
   return (
-    <header className="bg-card border-b sticky top-0 z-50">
-      <div className="container mx-auto px-4 flex justify-between items-center h-24 md:h-32">
+    <header className="bg-card border-b sticky top-0 z-50 h-20 flex items-center shadow-sm">
+      <div className="container mx-auto px-4 flex justify-between items-center h-full">
         <div className="flex items-center h-full">
           <Logo />
         </div>
