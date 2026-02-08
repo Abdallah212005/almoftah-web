@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -25,9 +24,8 @@ export function Header() {
   return (
     <header className="bg-card border-b sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
-        <Link href="/">
-          <Logo />
-        </Link>
+        {/* Removed Link wrapper because Logo component already contains a Link to / */}
+        <Logo />
         <nav className="flex items-center gap-4">
            { isAdmin && (
              <Button variant="ghost" asChild>
