@@ -2,10 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ------------------------------------------------------------------------
-    // Helper Functions
-    // ------------------------------------------------------------------------
-
     function isSignedIn() {
       return request.auth != null;
     }
@@ -31,48 +27,35 @@ service cloud.firestore {
       return isSuperAdmin() || isActiveAdmin();
     }
 
-    function isDocOwner() {
-      return isAdmin() && (
-        resource.data.createdBy == request.auth.uid || 
-        (resource.data.sharedWith != null && request.auth.uid in resource.data.sharedWith)
-      );
-    }
-
-    // ------------------------------------------------------------------------
-    // Collection Rules
-    // ------------------------------------------------------------------------
-    
-    match /users/{userId} {
-       allow read, update: if isOwner(userId);
-       allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
-     }
-
-    // Publicly readable listings, admin managed
+    // Publicly readable listings
     match /units/{unitId} {
       allow read, list: if true;
       allow create: if isAdmin();
-      allow update, delete: if isSuperAdmin() || isDocOwner();
+      allow update, delete: if isAdmin();
     }
 
+    match /users/{userId} {
+       allow read, update: if isOwner(userId);
+       allow create: if isSignedIn();
+     }
+
     match /leads/{leadId} {
-      allow create: if isAdmin();
-      allow read, update, delete: if isSuperAdmin() || isDocOwner();
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
     }
 
     match /brokers/{brokerId} {
-      allow create: if isAdmin();
-      allow read, update, delete: if isSuperAdmin() || isDocOwner();
+      allow read, list, create, update, delete: if isAdmin();
     }
 
     match /clients/{clientId} {
-      allow create: if isAdmin();
-      allow read, update, delete: if isSuperAdmin() || isDocOwner();
+      allow read, list, create, update, delete: if isAdmin();
     }
     
     match /chats/{chatId} {
-      allow read, list: if isAdmin() || (isSignedIn() && (chatId.split('_')[0] == request.auth.uid || (resource != null && resource.data.userId == request.auth.uid)));
-      allow create: if isAdmin() || (isSignedIn() && request.resource.data.userId == request.auth.uid);
-      allow update: if isAdmin() || (resource != null && resource.data.userId == request.auth.uid);
+      allow read, list: if isAdmin() || (isSignedIn() && (chatId.split('_')[0] == request.auth.uid));
+      allow create: if isSignedIn();
+      allow update: if isAdmin() || (isSignedIn() && chatId.split('_')[0] == request.auth.uid);
       allow delete: if isAdmin();
     }
 
@@ -88,6 +71,5 @@ service cloud.firestore {
       allow list, update, delete: if isSuperAdmin();
       allow create: if isSuperAdmin() || (isSignedIn() && request.auth.token.email == 'abdallah@almoftah.com');
     }
-
   }
 }
