@@ -1,6 +1,6 @@
 import type { Unit, Lead, Broker, AdminUser, NormalUser, Chat } from './definitions';
 
-// The live database is the source of truth, so we initialize empty arrays
+// Resetting all local data to start fresh. The Firestore database should be cleared manually in the Firebase console.
 export const allUnits: Unit[] = [];
 export const allLeads: Lead[] = [];
 export const allBrokers: Broker[] = [];

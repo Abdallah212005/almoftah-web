@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import logoImg from '@/logo.png';
 
 export function Logo() {
   const [mounted, setMounted] = useState(false);
@@ -22,7 +21,7 @@ export function Logo() {
     >
       <div className="h-12 w-[180px] relative">
         <Image 
-          src={logoImg}
+          src="/logo.png"
           alt="Almoftah Real Estate Services" 
           className="h-full w-auto object-contain"
           width={180}
