@@ -29,7 +29,7 @@ export function Logo() {
           priority
         />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col text-left">
         <span className="text-2xl font-black tracking-tight text-[#1A1A1A] leading-none">
           ALMOFTAH
         </span>
