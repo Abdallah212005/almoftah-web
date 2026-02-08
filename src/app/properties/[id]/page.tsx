@@ -11,10 +11,6 @@ import { firebaseConfig } from '@/firebase/config';
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  /**
-   * For 'output: export', we try to fetch actual IDs from Firestore.
-   * If it fails (e.g., during a local build without network), we provide a placeholder.
-   */
   try {
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     const db = getFirestore(app);
@@ -23,7 +19,7 @@ export async function generateStaticParams() {
       id: doc.id,
     }));
     
-    // Always include a placeholder to ensure the route is valid even if DB is empty
+    // Always include a placeholder to ensure the route is valid even if DB is empty during build
     return paths.length > 0 ? paths : [{ id: 'placeholder' }];
   } catch (error) {
     console.warn('Could not fetch static params from Firestore, using placeholder.', error);
