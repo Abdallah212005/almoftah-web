@@ -13,13 +13,14 @@ export function Logo() {
   }, []);
 
   if (!mounted) {
-    // Standardized skeleton size (h-24 w-24) to match the final desktop size and prevent hydration mismatch
-    return <div className="h-20 w-20 md:h-24 md:w-24 bg-muted/5 rounded-full animate-pulse" />;
+    // Use a stable, non-responsive size for the initial skeleton to prevent hydration mismatch.
+    // This matches the base size of the logo container.
+    return <div className="h-20 w-20 bg-muted/5 rounded-full animate-pulse" />;
   }
 
   return (
     <Link href="/" className="flex items-center transition-opacity hover:opacity-90 h-full relative z-20">
-      <div className="relative h-20 w-20 md:h-24 md:w-24 -mt-1">
+      <div className="relative h-20 w-20 md:h-24 md:w-24">
         <Image 
           src={logoImg} 
           alt="Almoftah Logo" 
