@@ -3,12 +3,13 @@ import { PropertyDetailClient } from './property-detail-client';
 /**
  * Next.js 15 Static Export Requirement:
  * When using 'output: export', dynamic routes must provide parameters at build time.
+ * For static exports, dynamicParams MUST be false.
  */
-export const dynamicParams = true;
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  // Return an empty array or placeholder to satisfy the build process.
-  // Since this is a client-side database, we'll handle the actual data fetching on the client.
+  // Return a placeholder to satisfy the build process for static export.
+  // The actual property data is fetched on the client side in PropertyDetailClient.
   return [
     { id: 'placeholder' }
   ];
