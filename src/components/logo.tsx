@@ -15,27 +15,27 @@ export function Logo() {
   }
 
   return (
-    <div className="flex items-center gap-2 group transition-opacity hover:opacity-90">
-      <div className="flex items-center justify-center h-10 w-10 bg-primary rounded-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
+    <div className="flex items-center gap-3 group transition-opacity hover:opacity-90">
+      <div className="flex items-center justify-center h-12 w-12 bg-[#2E3192] rounded-2xl shadow-sm overflow-hidden">
         <svg
           viewBox="0 0 24 24"
           fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
+          stroke="white"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="h-6 w-6 text-primary-foreground"
+          className="h-7 w-7"
         >
           <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <path d="M9 22V12h6v10" />
+          <polyline points="9 22 9 12 15 12 15 22" />
         </svg>
       </div>
-      <div className="flex flex-col -space-y-1">
-        <span className="text-xl font-bold font-headline tracking-tighter text-foreground">
+      <div className="flex flex-col">
+        <span className="text-2xl font-black tracking-tight text-[#1A1A1A] leading-none">
           ALMOFTAH
         </span>
-        <span className="text-[10px] font-bold tracking-[0.2em] text-primary uppercase">
-          Real Estate
+        <span className="text-[11px] font-bold tracking-[0.25em] text-[#2E3192] uppercase mt-1">
+          REAL ESTATE
         </span>
       </div>
     </div>
