@@ -24,8 +24,13 @@ export function Header() {
   return (
     <header className="bg-card border-b sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
-        {/* Removed Link wrapper because Logo component already contains a Link to / */}
+        {/* 
+            The Logo component already contains a <Link> to the home page.
+            We do NOT wrap it in another <Link> to avoid hydration errors 
+            ("<a> cannot be a descendant of <a>").
+        */}
         <Logo />
+        
         <nav className="flex items-center gap-4">
            { isAdmin && (
              <Button variant="ghost" asChild>

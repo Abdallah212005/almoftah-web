@@ -7,9 +7,11 @@ type Props = {
 /**
  * Next.js 15 Static Export Requirement:
  * When using 'output: export', dynamic routes must provide parameters at build time.
+ * This ensures the build process can generate the static HTML files for these routes.
  */
 export async function generateStaticParams() {
-  // Return an empty array or pre-defined list of IDs for the static build
+  // We provide a placeholder ID so the static build succeeds.
+  // Real property IDs are handled dynamically on the client side via Firestore.
   return [{ id: 'placeholder' }];
 }
 
